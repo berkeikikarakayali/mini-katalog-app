@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   final List<Product> cartItems;
   final Function(Product) onRemove;
 
@@ -12,7 +12,18 @@ class CartScreen extends StatelessWidget {
   });
 
   @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+  void removeItem(Product product) {
+    widget.onRemove(product);
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final cartItems = widget.cartItems;
     double total = cartItems.fold(0, (sum, item) => sum + item.price);
 
     return Scaffold(
@@ -24,7 +35,8 @@ class CartScreen extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.shopping_cart_outlined, size: 80, color: Colors.grey),
+                  Icon(Icons.shopping_cart_outlined,
+                      size: 80, color: Colors.grey),
                   SizedBox(height: 16),
                   Text(
                     'Your cart is empty',
@@ -59,7 +71,7 @@ class CartScreen extends StatelessWidget {
                         trailing: IconButton(
                           icon: const Icon(Icons.remove_circle_outline,
                               color: Colors.red),
-                          onPressed: () => onRemove(item),
+                          onPressed: () => removeItem(item),
                         ),
                       );
                     },
