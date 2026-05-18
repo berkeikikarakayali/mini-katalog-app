@@ -21,11 +21,22 @@ class DetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset(
+            Image.network(
               product.image,
               width: double.infinity,
               height: 300,
               fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 300,
+                  color: Colors.grey.shade100,
+                  child: const Icon(
+                    Icons.image_not_supported_outlined,
+                    size: 64,
+                    color: Colors.grey,
+                  ),
+                );
+              },
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -39,11 +50,20 @@ class DetailScreen extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 4),
+                  Text(
+                    product.tagline,
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.grey.shade600,
+                      fontStyle: FontStyle.italic,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Text(
                     '\$${product.price}',
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 22,
                       color: Colors.deepPurple,
                       fontWeight: FontWeight.w600,
                     ),
@@ -51,16 +71,35 @@ class DetailScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   const Text(
                     'Description',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     product.description,
-                    style: const TextStyle(fontSize: 16, height: 1.5),
+                    style: const TextStyle(fontSize: 15, height: 1.6),
                   ),
+                  if (product.specs.isNotEmpty) ...[
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Specifications',
+                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(height: 8),
+                    ...product.specs.entries.map(
+                      (entry) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                          children: [
+                            Text(
+                              '${entry.key}: ',
+                              style: const TextStyle(fontWeight: FontWeight.w600),
+                            ),
+                            Text(entry.value.toString()),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                   const SizedBox(height: 32),
                   SizedBox(
                     width: double.infinity,

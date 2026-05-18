@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
+import '../data/products_data.dart';
 import 'detail_screen.dart';
 import 'cart_screen.dart';
 
@@ -11,40 +12,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final List<Product> products = [
-    Product(
-      id: 1,
-      title: 'Xbox Series X',
-      description: 'The fastest, most powerful Xbox ever.',
-      price: 499.0,
-      image: 'assets/images/xbox.png',
-      category: 'gaming',
-    ),
-    Product(
-      id: 2,
-      title: 'iPad Air',
-      description: 'Powerful. Colorful. Wonderful.',
-      price: 599.0,
-      image: 'assets/images/ipad.png',
-      category: 'tablet',
-    ),
-    Product(
-      id: 3,
-      title: 'iPhone 17 Pro Max',
-      description: 'Titanium design. A237 Pro ultra mega chip.',
-      price: 999.0,
-      image: 'assets/images/iphone.png',
-      category: 'phone',
-    ),
-    Product(
-      id: 4,
-      title: 'MacBook Pro',
-      description: 'Supercharged by M3 Pro chip.',
-      price: 1999.0,
-      image: 'assets/images/macbook.png',
-      category: 'laptop',
-    ),
-  ];
+  // JSON verisini fromJson ile parse ediyoruz — simülasyon
+  final List<Product> products =
+      productsJson.map((json) => Product.fromJson(json)).toList();
 
   final List<Product> cartItems = [];
 
@@ -127,10 +97,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    child: Image.asset(
+                    child: Image.network(
                       product.image,
-                      fit: BoxFit.cover,
+                      fit: BoxFit.contain,
                       width: double.infinity,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey.shade100,
+                          child: const Icon(
+                            Icons.image_not_supported_outlined,
+                            size: 48,
+                            color: Colors.grey,
+                          ),
+                        );
+                      },
                     ),
                   ),
                   Padding(
