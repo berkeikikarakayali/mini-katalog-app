@@ -45,14 +45,17 @@ class CartScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final item = cartItems[index];
                       return ListTile(
-                        leading: Image.asset(
+                        leading: Image.network(
                           item.image,
                           width: 56,
                           height: 56,
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.image_not_supported_outlined,
+                                  size: 40, color: Colors.grey),
                         ),
                         title: Text(item.title),
-                        subtitle: Text('\$${item.price}'),
+                        subtitle: Text('\$${item.price.toInt()}'),
                         trailing: IconButton(
                           icon: const Icon(Icons.remove_circle_outline,
                               color: Colors.red),
@@ -75,7 +78,7 @@ class CartScreen extends StatelessWidget {
                                 fontSize: 18, fontWeight: FontWeight.bold),
                           ),
                           Text(
-                            '\$$total',
+                            '\$${total.toInt()}',
                             style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

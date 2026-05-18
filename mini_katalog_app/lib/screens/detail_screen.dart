@@ -61,7 +61,7 @@ class DetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    '\$${product.price}',
+                    '\$${product.price.toInt()}',
                     style: const TextStyle(
                       fontSize: 22,
                       color: Colors.deepPurple,
@@ -106,13 +106,13 @@ class DetailScreen extends StatelessWidget {
                     child: ElevatedButton(
                       onPressed: () {
                         onAddToCart(product);
-                        Navigator.pop(context);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             content: Text('${product.title} added to cart!'),
                             duration: const Duration(seconds: 2),
                           ),
                         );
+                        Navigator.pop(context);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepPurple,
