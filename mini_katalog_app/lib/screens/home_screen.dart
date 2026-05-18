@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import 'detail_screen.dart';
+import 'cart_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -45,15 +46,56 @@ class _HomeScreenState extends State<HomeScreen> {
     ),
   ];
 
+  final List<Product> cartItems = [];
+
+  void addToCart(Product product) {
+    setState(() {
+      cartItems.add(product);
+    });
+  }
+
+  void removeFromCart(Product product) {
+    setState(() {
+      cartItems.remove(product);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Discover'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.shopping_cart_outlined),
-            onPressed: () {},
+          Stack(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.shopping_cart_outlined),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => CartScreen(
+                        cartItems: cartItems,
+                        onRemove: removeFromCart,
+                      ),
+                    ),
+                  );
+                },
+              ),
+              if (cartItems.isNotEmpty)
+                Positioned(
+                  right: 6,
+                  top: 6,
+                  child: CircleAvatar(
+                    radius: 9,
+                    backgroundColor: Colors.red,
+                    child: Text(
+                      '${cartItems.length}',
+                      style: const TextStyle(fontSize: 11, color: Colors.white),
+                    ),
+                  ),
+                ),
+            ],
           ),
         ],
       ),
@@ -73,7 +115,10 @@ class _HomeScreenState extends State<HomeScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DetailScreen(product: product),
+                  builder: (context) => DetailScreen(
+                    product: product,
+                    onAddToCart: addToCart,
+                  ),
                 ),
               );
             },

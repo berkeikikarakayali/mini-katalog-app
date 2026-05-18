@@ -3,8 +3,13 @@ import '../models/product.dart';
 
 class DetailScreen extends StatelessWidget {
   final Product product;
+  final Function(Product) onAddToCart;
 
-  const DetailScreen({super.key, required this.product});
+  const DetailScreen({
+    super.key,
+    required this.product,
+    required this.onAddToCart,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +25,7 @@ class DetailScreen extends StatelessWidget {
               product.image,
               width: double.infinity,
               height: 300,
-              fit: BoxFit.cover,
+              fit: BoxFit.contain,
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -60,7 +65,16 @@ class DetailScreen extends StatelessWidget {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        onAddToCart(product);
+                        Navigator.pop(context);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('${product.title} added to cart!'),
+                            duration: const Duration(seconds: 2),
+                          ),
+                        );
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepPurple,
                         foregroundColor: Colors.white,
